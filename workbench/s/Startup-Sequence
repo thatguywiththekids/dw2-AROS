@@ -128,6 +128,8 @@ If EXISTS "S:User-Startup"
     Execute "S:User-Startup"
 EndIf
 
+;Copy "SYS:Arch/i386" "RAM:i386" ALL >NIL:
+;Assign "SYSV0:"     "RAM:i386"
 Assign "SYSV0:"     "SYS:Arch/i386"
 Assign "LIBSV0:"    "SYSV0:Libs"
 Assign "LIBSV0:"    "SYSV0:Classes" ADD
