@@ -4,7 +4,6 @@
     Desc: Installer V43.3
 */
 
-#define DEBUG 1
 #include "Installer.h"
 #include "main.h"
 #include "cleanup.h"
@@ -16,9 +15,9 @@
 
 #include "version.h"
 
-
-#ifdef DEBUG
-char test_script[] = "SYS:Developer/Debug/Tests/Installer/test.script";
+#define TESTING 0
+#if TESTING
+char test_script[] = "SYS:Development/Debug/Tests/Installer/test.script";
 #endif /* DEBUG */
 
 char *filename = NULL;
@@ -62,8 +61,10 @@ int main(int argc, char *argv[])
         }
         else
         {
-            fprintf(stderr, "No SCRIPT specified!\n");
 #ifdef DEBUG
+            fprintf(stderr, "No SCRIPT specified!\n");
+#endif
+#if TESTING
             fprintf(stderr, "Using %s instead...\n", test_script);
             filename = test_script;
 #else
@@ -86,9 +87,12 @@ int main(int argc, char *argv[])
         {
 #ifdef DEBUG
             fprintf(stderr, "No SCRIPT ToolType in Icon!\n");
+#endif
+#if TESTING
             ttemp = test_script;
 #else
             ArgArrayDone();
+            Delay(50);
             exit(-1);
 #endif /* DEBUG */
         }
