@@ -109,18 +109,18 @@ static void add128(ULONG *s, ULONG *d)
     t1[3] = Get_Low32of64(Qtmp1);
 
     Qtmp1 = UMult64(x1, y2);
-    t2[3] = 0;
-    t2[2] = Get_High32of64(Qtmp1);
-    t2[1] = Get_Low32of64(Qtmp1);
     t2[0] = 0;
+    t2[1] = Get_High32of64(Qtmp1);
+    t2[2] = Get_Low32of64(Qtmp1);
+    t2[3] = 0;
 
     add128(t2, t1);
 
     Qtmp1 = UMult64(x2, y1);
-    t2[3] = 0;
-    t2[2] = Get_High32of64(Qtmp1);
-    t2[1] = Get_Low32of64(Qtmp1);
     t2[0] = 0;
+    t2[1] = Get_High32of64(Qtmp1);
+    t2[2] = Get_Low32of64(Qtmp1);
+    t2[3] = 0;
 
     add128(t2, t1);
 
@@ -174,7 +174,7 @@ static void add128(ULONG *s, ULONG *d)
     OR64Q(res, Qtmp1);
 
     if (sign)
-        OR64(res, IEEEDPSign_Mask_Hi, IEEEDPSign_Mask_Lo);
+        OR64QC(res, IEEEDPSign_Mask_Hi, IEEEDPSign_Mask_Lo);
 
     return *Dres;
 
