@@ -48,6 +48,7 @@ If NOT WARN
     ; Perform basic C library unit tests...
     Execute S/Test cunit/crt/stdc/math/cunit-crt-math           ;CrtMath_Suite
     Execute S/Test cunit/crt/stdc/cunit-crt-fileseek            ;FileSeek_Suite
+    Execute S/Test cunit/crt/stdc/cunit-crt-time                ;time_Suite
     Execute S/Test cunit/crt/stdc/cunit-crt-sscanf              ;sscanf_Suite
     Execute S/Test cunit/crt/stdc/cunit-crt-sxprintf            ;sxprintf_Suite
     Execute S/Test cunit/crt/posix/cunit-crt-fread              ;fread_Suite
@@ -62,6 +63,7 @@ If NOT WARN
 
     ; Perform basic "Zune" unit tests...
     Execute S/Test cunit/zune/cunit-zune-cycle                  ;MUIC_Cycle_Suite
+    Execute S/Test cunit/zune/cunit-zune-dragdrop               ;MUIM_DragDrop_Suite
     Execute S/Test cunit/zune/cunit-zune-handleevent            ;MUIM_HandleEvent_Suite
     Execute S/Test cunit/zune/cunit-zune-handleevent-2          ;MUIM_HandleEvent_2_Suite
     Execute S/Test cunit/zune/cunit-zune-handleevent-3          ;MUIM_HandleEvent_3_Suite
@@ -79,7 +81,7 @@ If NOT WARN
     Execute S/Test cunit/cplusplus/cunit-cplusplus-static       ;CPlusPlus_Static_Suite
 
     Echo "===================" >DEBUG:
-    Echo "Expected tests: 235" >DEBUG:
+    Echo "Expected tests: 245" >DEBUG:
     Echo "===================" >DEBUG:
 Endif
 

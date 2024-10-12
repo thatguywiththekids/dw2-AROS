@@ -22,7 +22,7 @@ static inline void _SendIntuiMessage(struct Window *w, struct IntuiMessage *imsg
     PutMsg(w->UserPort, &imsg->ExecMessage);
 }
 
-static inline void Click(struct Window *w, LONG x, LONG y)
+static inline void MouseMoveTo(struct Window *w, LONG x, LONG y, BOOL selpressed)
 {
     struct IntuiMessage *imsg = NULL;
 
@@ -32,7 +32,13 @@ static inline void Click(struct Window *w, LONG x, LONG y)
     imsg->MouseX = (WORD)x;
     imsg->MouseY = (WORD)y;
     imsg->IAddress = w;
+    if (selpressed) imsg->Qualifier |= IEQUALIFIER_LEFTBUTTON;
     _SendIntuiMessage(w, imsg);
+}
+
+static inline void MouseLButtonPress(struct Window *w, LONG x, LONG y)
+{
+    struct IntuiMessage *imsg = NULL;
 
     imsg = _AllocIntuiMessage(w);
     imsg->Class = IDCMP_MOUSEBUTTONS;
@@ -41,6 +47,11 @@ static inline void Click(struct Window *w, LONG x, LONG y)
     imsg->MouseY = (WORD)y;
     imsg->IAddress = w;
     _SendIntuiMessage(w, imsg);
+}
+
+static inline void MouseLButtonRelease(struct Window *w, LONG x, LONG y)
+{
+    struct IntuiMessage *imsg = NULL;
 
     imsg = _AllocIntuiMessage(w);
     imsg->Class = IDCMP_MOUSEBUTTONS;
@@ -49,6 +60,26 @@ static inline void Click(struct Window *w, LONG x, LONG y)
     imsg->MouseY = (WORD)y;
     imsg->IAddress = w;
     _SendIntuiMessage(w, imsg);
+}
+
+static inline void Click(struct Window *w, LONG x, LONG y)
+{
+    MouseMoveTo(w, x, y, FALSE);
+
+    MouseLButtonPress(w, x, y);
+
+    MouseLButtonRelease(w, x, y);
+}
+
+static inline void DragFromTo(struct Window *w, LONG fromx, LONG fromy, LONG tox, LONG toy)
+{
+    MouseMoveTo(w, fromx, fromy, FALSE);
+
+    MouseLButtonPress(w, fromx, fromy);
+
+    MouseMoveTo(w, tox, toy, TRUE);
+
+    MouseLButtonRelease(w, tox, toy);
 
 }
 #endif
@@ -126,21 +157,25 @@ static ULONG SAVEDS func(REG(a0, struct IClass *cl), \
         VPrintf("Test failed %s %s:%ld\n", _tags);          \
     }
 
-#define CU_CI_DEFINE_SUITE(...) \
-    __cu_suite_setup();         \
+#define CU_CI_DEFINE_SUITE(name, ssetup, stearndown, tsetup, tteardown) \
+    int  (*_p_suite_setup)()    = ssetup;       \
+    int  (*_p_suite_teardown)() = stearndown;   \
+    void (*_p_test_setup)()     = tsetup;       \
+    void (*_p_test_teardown)()  = tteardown;    \
+    if (_p_suite_setup) _p_suite_setup();       \
 
-#define CUNIT_CI_TEST(func)                 \
-    __cu_test_setup();                      \
-    {                                       \
-        CONST_STRPTR f = #func;             \
-        ULONG _tags[] = { (ULONG) f};       \
-        VPrintf("Running: %s\n", _tags);    \
-    }                                       \
-    func();                                 \
-    __cu_test_teardown();                   \
+#define CUNIT_CI_TEST(func)                     \
+    if (_p_test_setup) _p_test_setup();         \
+    {                                           \
+        CONST_STRPTR f = #func;                 \
+        ULONG _tags[] = { (ULONG) f};           \
+        VPrintf("Running: %s\n", _tags);        \
+    }                                           \
+    func();                                     \
+    if (_p_test_teardown) _p_test_teardown();   \
 
 #define CU_CI_RUN_SUITES()      \
-    __cu_suite_teardown();      \
+    ({int _ret = 0; if (_p_suite_teardown) _p_suite_teardown(); _ret;}) \
 
 #endif
 
