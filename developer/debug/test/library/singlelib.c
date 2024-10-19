@@ -78,6 +78,17 @@ AROS_LH9(LONG, RegAdd9,
     AROS_LIBFUNC_EXIT
 }
 
+AROS_LH0(double, RegReturnMinusPi,
+    struct SingleBase *, SingleBase, 9, Single
+)
+{
+    AROS_LIBFUNC_INIT
+
+    return -3.14;
+    
+    AROS_LIBFUNC_EXIT
+}
+
 void StackSetValue(int v)
 {
     struct SingleBase *SingleBase = (struct SingleBase *)__aros_getbase_SingleBase();
