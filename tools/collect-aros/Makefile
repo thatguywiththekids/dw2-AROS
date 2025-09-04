@@ -19,6 +19,11 @@ COLLECT-AROS-DIR := $(TOP)/tools/collect-aros
 else
 COLLECT-AROS-DIR := .
 endif
+ifneq ($(AROS_LIB),)
+AROS_LIB_DIR := $(AROS_LIB)
+else
+AROS_LIB_DIR := .
+endif
 ifneq ($(CAGENDIR),)
 COLLECTAROSINCLUDES := -I $(CAGENDIR)
 endif
