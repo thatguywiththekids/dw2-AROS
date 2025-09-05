@@ -11,5 +11,5 @@ extern void backend_init(char *);
 extern int check_and_print_undefined_symbols(const char *file);
 extern void collect_sets(const char *file, setnode **setlist_ptr);
 extern void collect_libs(const char *file, setnode **liblist_ptr);
-extern void collect_extra(const char *file, setnode **liblist_ptr);
+extern void collect_extra(const char *file, setnode **liblist_ptr, const char *sysroot);
 #endif /* !_BACKEND_H_ */

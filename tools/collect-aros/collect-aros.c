@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
     int incremental = 0, ignore_undefined_symbols = 0;
     int strip_all   = 0;
     char *do_verbose = NULL;
+    const char *sysroot = "";
 
     setnode *setlist = NULL, *liblist = NULL, *extralist = NULL;
 
@@ -138,6 +139,12 @@ int main(int argc, char *argv[])
                 do_verbose = argv[cnt];
                 break;
             }
+            else
+            /* sysroot */
+            if (strncmp(&argv[cnt][1], "-sysroot", 8) == 0)
+            {
+                sysroot = argv[cnt][9]=='='?&argv[cnt][10]:argv[++cnt];
+            }
         }
     }
 
@@ -182,7 +189,7 @@ int main(int argc, char *argv[])
        */
     backend_init(ldargs[0]);
     collect_sets(tempoutput, &setlist);
-    collect_extra(tempoutput, &extralist);
+    collect_extra(tempoutput, &extralist, sysroot);
     collect_libs(tempoutput, &liblist);
 
     if (setlist) {

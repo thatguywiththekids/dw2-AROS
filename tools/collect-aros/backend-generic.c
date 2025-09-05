@@ -112,7 +112,7 @@ void collect_libs(const char *file, setnode **liblist_ptr)
     pclose(pipe);
 }
 
-void collect_extra(const char *file, setnode **liblist_ptr)
+void collect_extra(const char *file, setnode **liblist_ptr, const char *sysroot)
 {
     char *objname, secname[201];
     char buff[256];
@@ -133,8 +133,8 @@ void collect_extra(const char *file, setnode **liblist_ptr)
         if ((strncmp(secname, "__cxa_pure_virtual", 18) == 0) &&
             (type == 'w'))
         {
-            objname = calloc(strlen(OBJLIBDIR)+strlen(AROSOBJ_CXXPUREVIRT)+2, 1);
-            sprintf(objname, "%s/%s", OBJLIBDIR, AROSOBJ_CXXPUREVIRT);
+            objname = calloc(strlen(sysroot)+4+strlen(AROSOBJ_CXXPUREVIRT)+2, 1);
+            sprintf(objname, "%s/lib/%s", sysroot, AROSOBJ_CXXPUREVIRT);
         }
         else
             continue;
